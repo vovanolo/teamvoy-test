@@ -22,23 +22,27 @@ const App = () => {
   };
 
   const getOnePokeItem = async (name) => {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-    const data = await response.json();
-    const countOfMoves = data.moves.filter((moves) =>
-      moves.hasOwnProperty("move")
-    ).length;
-    setOnePokeImage(data.sprites.back_default);
-    setPokeInfo({
-      type: data.types[0].type.name,
-      attack: data.stats[1].base_stat,
-      defense: data.stats[2].base_stat,
-      hp: data.stats[0].base_stat,
-      spAttack: data.stats[3].base_stat,
-      spDefence: data.stats[4].base_stat,
-      speed: data.stats[4].base_stat,
-      weight: data.weight,
-      totalMoves: countOfMoves,
-    });
+      
+      if(pokeInfo.name !== name){
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+        const data = await response.json();
+        const countOfMoves = data.moves.filter((moves) =>
+          moves.hasOwnProperty("move")
+        ).length;
+        setOnePokeImage(data.sprites.back_default);
+        setPokeInfo({
+          name: name,
+          type: data.types[0].type.name,
+          attack: data.stats[1].base_stat,
+          defense: data.stats[2].base_stat,
+          hp: data.stats[0].base_stat,
+          spAttack: data.stats[3].base_stat,
+          spDefence: data.stats[4].base_stat,
+          speed: data.stats[4].base_stat,
+          weight: data.weight,
+          totalMoves: countOfMoves,
+        });
+      }
   };
 
   const handleLoadMore = () => {
@@ -63,7 +67,7 @@ const App = () => {
           {pokemons.map((pokemon) => (
             <div key={pokemon.name} className="pokemon-card-grid">
               <div
-                className="border-double border-4  border-sky-500 rounded-lg"
+                className="border-double border-4  border-sky-500 rounded-lg cursor-pointer hover:shadow-2xl"
                 onClick={() => getOnePokeItem(pokemon.name)}
               >
                 <img
@@ -79,7 +83,7 @@ const App = () => {
           ))}
           {!isLoading && (
             <div
-              className="text-center row-span-2 row-span-2 col-span-2 max-w-96 mx-auto bg-sky-600 px-11 rounded-lg py-4"
+              className="text-center row-span-2 row-span-2 col-span-2 max-w-96 mx-auto bg-sky-600 px-11 rounded-lg py-4 text-white cursor-pointer hover:shadow-2xl"
               onClick={handleLoadMore}
             >
               Load More
